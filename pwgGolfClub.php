@@ -50,19 +50,107 @@ foreach ($golfcourses as $course) {
   $ry_total = 0;
   $by_total = 0;
 ?>
+<style>
+.diagonal-cell {
+  transform: skew(-45deg);
+  background-color: #ddd;
+  padding: 10px;
+}
 
+.yellow {
+    background-color: lightyellow ;
+}
+.red {
+    background-color: lightcoral;
+}
+.blue {
+    background-color: lightblue;
+    
+}
+.white {
+    background-color: white;
+}
+#course_details{
+    width: 400px;
+}
+
+table {
+    margin:0;
+    padding:0;
+}
+.red,.yellow,.white,.blue, td {
+    min-width: 80px;
+    text-align: center;
+}
+.name {
+    min-width: 200px;
+}
+</style>
+<table id="course_details">
+    <tr>
+        <th colspan="10"><?php echo $course->name;  ?> Details</th>
+    </tr>
+    <tr>
+        <th class="white">Par</th>
+        <th class="yellow">Par</th>
+        <th class="red">Par</th>
+        <th class="blue">Par</th>
+
+    </tr>
+    <tr>
+        <td class="white"><?php echo $course->white_par_total;?></td>
+        <td class="yellow"><?php echo $course->yellow_par_total;?></td>
+        <td class="red"><?php echo $course->red_par_total;?></td>
+        <td class="blue"><?php echo $course->blue_par_total;?></td>
+
+    </tr>
+    <tr>
+        <th class="white">Yds</th>
+        <th class="yellow">Yds</th>
+        <th class="red">Yds</th>
+        <th class="blue">Yds</th>
+
+    </tr>
+    <tr>
+        <td class="white"><?php echo $course->white_yards_total;?></td>
+        <td class="yellow"><?php echo $course->yellow_yards_total;?></td>
+        <td class="red"><?php echo $course->red_yards_total;?></td>
+        <td class="blue"><?php echo $course->blue_yards_total;?></td>
+
+
+    </tr>
+    
+    <tr>
+        <th class="white">Course Rating</th>
+        <th class="yellow">Slope Rating</th>
+        <th class="red">Course Rating</th>
+        <th class="blue">Slope Rating</th>
+
+    </tr>
+    <tr>
+        <td class="white"><?php echo $course->cr_white;?></td>
+        <td class="yellow"><?php echo $course->sr_white;?></td>
+        <td class="red"><?php echo $course->cr_red;?></td>
+        <td class="blue"><?php echo $course->sr_red;?></td>
+
+    </tr>
+    
+    
+</table>
 <table>
     <tr>
-        <th colspan="8"><?php echo $course->name;  ?></th>
+        <th colspan="10"><?php echo $course->name;  ?> Scorecard</th>
     <tr>
   <tr>
-    <th class="">Hole</th>
-    <th class="">Name</th>
-    <th class="">WY</th>
-    <th class="">YY</th>
+    <th class=""></th>
+    <th class="name">Name</th>
+    <th class="white">WY</th>
+    <th class="yellow">YY</th>
+    <th class="">Par</th>
     <th class="">SI</th>
-    <th class="">RY</th>
-    <th class="">BY</th>
+    <th class="red">RY</th>
+    <th class="blue">BY</th>
+    <th class="">Par</th>
     <th class="">SI</th>
   </tr>
 
@@ -72,12 +160,14 @@ foreach ($golfcourses as $course) {
 
   <tr>
     <td><?php echo $course->holes[$i]->number;?></td>
-    <td><?php echo $course->holes[$i]->name;    ?></td>
-    <td><?php echo $course->holes[$i]->white_yards;    ?></td>
-    <td><?php echo $course->holes[$i]->yellow_yards;    ?></td>
-    <td><?php echo $course->holes[$i]->si_white;    ?></td>
-    <td><?php echo $course->holes[$i]->red_yards;    ?></td>
-    <td><?php echo $course->holes[$i]->blue_yards;    ?></td>
+    <td><?php echo $course->holes[$i]->name; ?></td>
+    <td class="white"><?php echo $course->holes[$i]->white_yards; ?></td>
+    <td class="yellow"><?php echo $course->holes[$i]->yellow_yards; ?></td>
+    <td class=""><?php echo $course->holes[$i]->yellow_par; ?></td>
+    <td><?php echo $course->holes[$i]->si_white; ?></td>
+    <td class="red"><?php echo $course->holes[$i]->red_yards; ?></td>
+    <td class="blue"><?php echo $course->holes[$i]->blue_yards; ?></td>
+    <td><?php echo $course->holes[$i]->red_par; ?></td>
     <td><?php echo $course->holes[$i]->si_red; ?></td>
   </tr>
 
@@ -90,13 +180,15 @@ foreach ($golfcourses as $course) {
     if ($i == 8) {
   ?>
       <tr>
-        <td>Front Nine</td>
+        <td>Front</td>
         <td></td>
-        <td><?php echo $wy_total; ?></td>
-        <td><?php echo $yy_total; ?></td>
+        <td class="white"><?php echo $wy_total; ?></td>
+        <td class="yellow"><?php echo $yy_total; ?></td>
         <td></td>
-        <td><?php echo $ry_total; ?></td>
-        <td><?php echo $by_total; ?></td>
+        <td></td>
+        <td class="red"><?php echo $ry_total; ?></td>
+        <td class="blue"><?php echo $by_total; ?></td>
+        <td></td>
         <td></td>
       </tr>
       
@@ -116,13 +208,15 @@ foreach ($golfcourses as $course) {
       
       ?>
       <tr>
-        <td>Back Nine</td>
+        <td>Back</td>
         <td></td>
-        <td><?php echo $wy_total; ?></td>
-        <td><?php echo $yy_total; ?></td>
+        <td class="white"><?php echo $wy_total; ?></td>
+        <td class="yellow"><?php echo $yy_total; ?></td>
         <td></td>
-        <td><?php echo $ry_total; ?></td>
-        <td><?php echo $by_total; ?></td>
+        <td></td>
+        <td class="red"><?php echo $ry_total; ?></td>
+        <td class="blue"><?php echo $by_total; ?></td>
+        <td></td>
         <td></td>
       </tr>
   <?php
@@ -138,11 +232,13 @@ foreach ($golfcourses as $course) {
   <tr>
     <td>Totals</td>
     <td></td>
-    <td><?php echo $course->white_yards_total;?></td>
-    <td><?php echo $course->yellow_yards_total;?></td>
+    <td class="white"><?php echo $course->white_yards_total;?></td>
+    <td class="yellow"><?php echo $course->yellow_yards_total;?></td>
     <td></td>
-    <td><?php echo $course->red_yards_total;?></td>
-    <td><?php echo $course->blue_yards_total;?></td>
+    <td></td>
+    <td class="red"><?php echo $course->red_yards_total;?></td>
+    <td class="blue"><?php echo $course->blue_yards_total;?></td>
+    <td></td>
     <td></td>
   </tr>
 </table>
