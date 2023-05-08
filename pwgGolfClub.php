@@ -41,10 +41,59 @@ class pwgGolfClub {
     public function show_scorcard( $course_ID = 0 )
     {
         
-$golfcourses = $this->getClubCourses();
+    $golfcourses = $this->getClubCourses();
+        for ( $i = 0; $i < count($golfcourses); $i++ )
+    {
+
+        if ($golfcourses[$i]->white_yards_total > 0)
+        {
+            $golfcourses[$i]->white_yards = $i;
+        }
+
+        if ($golfcourses[$i]->yellow_yards_total > 0)
+        {
+            $golfcourses[$i]->yellow_yards = $i;
+        }
+
+        if ($golfcourses[$i]->red_yards_total > 0)
+        {
+            $golfcourses[$i]->red_yards = $i;
+        }
+
+        if ($golfcourses[$i]->blue_yards_total > 0)
+        {
+            $golfcourses[$i]->blue_yards = $i;
+        }
+
+        if ($golfcourses[$i]->white_par_total > 0)
+        {
+            $golfcourses[$i]->white_par = $i;
+        }
+
+        if ($golfcourses[$i]->yellow_par_total > 0)
+        {
+            $golfcourses[$i]->yellow_par = $i;
+        }
+
+        if ($golfcourses[$i]->red_par_total > 0)
+        {
+            $golfcourses[$i]->red_par = $i;
+        }
+
+        if ($golfcourses[$i]->blue_par_total > 0)
+        {
+            $golfcourses[$i]->blue_par = $i;
+        }
+    
+ }
+ $this->pretty_print($golfcourses);
+ //$this->pretty_print($i);
+
+//$this->pretty_print($golfcourses);
+
 
 foreach ($golfcourses as $course) {
-    //$this->pretty_print($course);
+    
   $wy_total = 0;
   $yy_total = 0;
   $ry_total = 0;
@@ -137,6 +186,15 @@ table {
     
     
 </table>
+<?php
+
+
+
+
+
+
+
+?>
 <table>
     <tr>
         <th colspan="10"><?php echo $course->name;  ?> Scorecard</th>
