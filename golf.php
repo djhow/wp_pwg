@@ -48,10 +48,10 @@ add_shortcode('pwg_display', 'pwg_golf_club');
 function pwg_golf_club()
 
 {
-    $club_ID = 8;
+    $club_ID = 6;
     $golf_club =  new pwgGolfClub($club_ID);
     $golf_club->show_golf_club();
-    $golf_club->show_scorcard();
+    $golf_club->show_edit_scorcard();
     //$golf_club->show_golf_club_submission(); 
     //$golf_club->delete_golf_club(2);
     echo "<p>The Code to mess around with this shortcode is in golf.php</p>";
