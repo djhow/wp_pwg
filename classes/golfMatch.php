@@ -17,15 +17,13 @@ class golfMatch
         if ($match_ID > 0 )
         {
             global $wpdb;
-
+                                        //wordpress function prefix needed
             $match_SQL = "SELECT * FROM `wp_matches` WHERE `match_ID` = %d";
             $match = $wpdb->get_row($wpdb->prepare($match_SQL, $match_ID));
             if ($match) 
             {
                 foreach ($match as $key => $value)
                 {
-
-                
                     switch ($key)
                     {
                         case 'match_ID' :

@@ -5,7 +5,9 @@
         private $holes;
         private $front_nine;
         private $back_nine;
+
         private $hole_ID;
+        
         private $course_ID;
         private $number;
         private $name;
@@ -23,28 +25,142 @@
         private $si_white;
         private $si_blue;
 
-        
 
+        /**
+         * At the moment it is populating properties $holes, $front_nine and $back_nine with arrays
+         * @param $hole int or array() 
+         */
+        public function __construct() {
 
-
-        
-
-        public function __construct($hole) {
-
-            $this->populate_class($hole);
+            // if (is_int($hole)) {
+            //     // this will populate $holes, $front_nine $back_nine from database
+            //     $this->populate_class($hole);
+            //     $this->pretty_print($this);
+            // } elseif(is_array($hole)) {
+            //     // populate single hole from array
+            //     $this->setCourseID($hole['course_ID']);
+            //     $this->setNumber($hole['number']);
+            //     $this->setName($hole['name']);
+            //     $this->setProTip($hole['pro_tip']);
+            //     $this->setBlueYards($hole['blue_yards']);
+            //     $this->setRedYards($hole['red_yards']);
+            //     $this->setYellowYards($hole['yellow_yards']);
+            //     $this->setWhiteYards($hole['white_yards']);
+            //     $this->setBluePar($hole['blue_par']);
+            //     $this->setRedPar($hole['red_par']);
+            //     $this->setYellowPar($hole['yellow_par']);
+            //     $this->setWhitePar($hole['white_par']);
+            //     $this->setSiBlue($hole['si_blue']);
+            //     $this->setSiRed($hole['si_red']);
+            //     $this->setSiYellow($hole['si_yellow']);
+            //     $this->setSiWhite($hole['si_white']);
+            // }
+            
 
         }
 
-        public function populate_class($holes)
-        {
+        /**
+         * Inserts one hole into the database 
+         * 
+         * Development Note: Should/could be passed an array of holes 
+         * but can be passed each hole one by one from an outside function
+         * as an array of $args in populate_class()
+         * 
+         * 
+         */
+        public function inserHole(){
+
+            $args = [
+
+                'course_ID' => $this->getCourseID(),
+                'hole_number' => $this->getNumber(),
+                'hole_name' => $this->getName(),
+                'pro_tip' => $this->getProTip(),
+                'blue_yards' => $this->getBlueYards(),
+                'red_yards' => $this->getRedYards(),
+                'yellow_yards' => $this->getYellowYards(),
+                'white_yards' => $this->getWhiteYards(),
+                'blue_par' => $this->getBluePar(),
+                'red_par' => $this->getRedPar(),
+                'yellow_par' => $this->getYellowPar(),
+                'white_par' => $this->getWhitePar(),
+                'si_blue'=> $this->getSiBlue(),
+                'si_red' => $this->getSiRed(),
+                'si_yellow' => $this->getSiYellow(),
+                'si_white' => $this->getSiYellow()
+            ];
+
+            $formats = [
+                '%d', '%d', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d',
+            ];
+            global $wpdb;
+            $results = $wpdb->insert('wp_holes', $args, $formats);
+
+            if ($results) {
+                return $wpdb->insert_id;
+            } else {
+                return false;
+            }
+
+            // this needs to use $wpdb->query
+        }
+
+        public function insert_hole($args){
+
+            $formats = [
+                '%d', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d'
+            ];
+            global $wpdb;
+            $results = $wpdb->insert('wp_holes', $args, $formats);
+
+            if ($results) {
+                return $wpdb->insert_id;
+            } else {
+                return false;
+            }
+
+            // this needs to use $wpdb->query
+        }
+
+
+        /**
+         * function to quickly insert holes with only a course_ID and the number of holes
+         */
+        public static function insertHoleNumbers($course_ID, $number){
+
             global $wpdb;
 
-            if ( is_object($holes))
-            {
+            $preparedSQL = $wpdb->prepare(
+                "INSERT INTO `wp_holes` (`course_ID`, `number`) VALUES (%d, %d)", 
+                $course_ID, $number  
+                );
+                
+                $wpdb->query($preparedSQL);
+                return $wpdb->insert_ID;
 
+        }
+
+        /**
+         * Populates the class with the holes of a golfcourse
+         * 
+         * Development Note: Not sure why an object would be passed
+         * I must have had something in mind 
+         */
+        public function populate_class_by_object($holes_object)
+        {
+            
+            if ( is_object($holes_object))
+            {
+                // convert object to array
+                $holes = get_object_vars($holes_object);
                 $this->setHoles($holes);
 
-            } else {
+            }
+        }
+
+        public function populate_class_by_ID($hole_ID){
+
+            global $wpdb;
                 
                 $holeSQL = "SELECT  `hole_ID`, `number`, `name`, `white_yards`, `white_par`, `si_white`, `yellow_yards`, `yellow_par`, `si_yellow`, `red_yards`, `red_par`, `si_red`, `blue_yards`, `blue_par`, `si_blue` 
                 FROM `wp_holes` 
@@ -52,7 +168,7 @@
                 `course_ID` = %d
                 ORDER BY `number`";
 
-                $holes = $wpdb->get_results($wpdb->prepare($holeSQL, $holes), 'ARRAY_A');
+                $holes = $wpdb->get_results($wpdb->prepare($holeSQL, $hole_ID), 'ARRAY_A');
 
                 if ($holes) {
                     $this->setHoles($holes);
@@ -60,18 +176,13 @@
                     $this->setFrontNine($split_arrays[0]);
                     $this->setBackNine($split_arrays[1]);
                 } 
-                
-            }
+
         }
 
-        public function remove_scorecard_columns_NEW(array $columns) {
-            $h =  array_diff($this->getHoles(), $columns);
-            $this->setHoles( $h )  ;
-            $this->setFrontNine( array_diff($this->getFrontNine(), $columns) );
-            $this->setBackNine( array_diff($this->getBackNine(), $columns) );
-        }
-       
-
+        /**
+         * @param [$columns] an array of columns to remove from the prperty $holes
+         * Development Note: could and should be used to remove them from $front_nine and $back_nine
+         */
         public function remove_scorecard_columns( array $columns )
         {
             $holes = $this->getHoles();
@@ -157,35 +268,35 @@
                     break;
 
                     case 'blue_yards' :
-                        echo '<th class="blue_yards">Yds</th>';
+                        echo '<th class="blue">Yds</th>';
                     break;
 
                     case 'red_yards' :
-                        echo '<th class="red_yards">Yds</th>';
+                        echo '<th class="red">Yds</th>';
                     break;
 
                     case 'yellow_yards' :
-                        echo '<th class="yellow_yards">Yds</th>';
+                        echo '<th class="yellow">Yds</th>';
                     break;
 
                     case 'white_yards' :
-                        echo '<th class="white_yards">Yds</th>';
+                        echo '<th class="white">Yds</th>';
                     break;
 
                     case 'red_par' :
-                        echo '<th class="red_par">Par</th>';
+                        echo '<th class="red">Par</th>';
                     break;
 
                     case 'yellow_par' :
-                        echo '<th class="yellow_par">Par</th>';
+                        echo '<th class="yellow">Par</th>';
                     break;
 
                     case 'white_par' :
-                        echo '<th class="white_par">Par</th>';
+                        echo '<th class="white">Par</th>';
                     break;
 
                     case 'blue_par' :
-                        echo '<th class="blue_par">Par</th>';
+                        echo '<th class="blue">Par</th>';
                     break;
 
                     case 'si_red' :
@@ -210,9 +321,28 @@
             echo '</tr>';
         }
 
+        /**
+         * Builds out a table showing the score card of a course
+         * @param $which_holes can be 'front_nine' 'back_nine' or if left blank
+         * will display both front and back holes
+         * 
+         * Development Note: Should be passed an array of columns to remove
+         * from property $holes which holds the holes array of the course 
+         * @param $key the hole number
+         * @param $key2 is the database field names and 
+         * @param $value is the value returned
+         * 
+         * Uses function remove_scorecard_columns() to remove columns from the table
+         * @array $columns_to_remove = [ 'name', 'white_yards', 'white_par', 'si_white', 'yellow_yards', 'yellow_par','si_yellow', 'blue_yards', 'blue_par', 'si_blue', 'red_yards', 'red_par', 'si_red'];
+         * 
+         * Uses function build_scorecard_head()
+         * Development Note: I did this to tidy up or abstract out functionality
+         * It is used in the middle of building a table so can not be used on it's own
+         * as it only builds table rows
+         */
         public function build_table($which_holes = '')
         {
-            //$columns_to_remove = [ 'name', 'white_yards', 'white_par', 'si_white', 'yellow_yards', 'yellow_par','si_yellow', 'blue_yards', 'blue_par', 'si_blue', 'red_yards', 'red_par', 'si_red'];
+            
             $columns_to_remove = [ 'si_white','si_yellow', 'si_blue', 'si_red', 'blue_yards', 'blue_par'];
             $this->remove_scorecard_columns($columns_to_remove);
 
@@ -267,35 +397,35 @@
                     break;
 
                     case 'blue_yards' :
-                        echo "<th class=''>$blue_yds_total</th>";
+                        echo "<th class='blue'>$blue_yds_total</th>";
                     break;
 
                     case 'red_yards' :
-                        echo "<th class=''$>$red_yds_total</th>";
+                        echo "<th class='red'>$red_yds_total</th>";
                     break;
 
                     case 'yellow_yards' :
-                        echo "<th class=''>$yellow_yds_total</th>";
+                        echo "<th class='yellow'>$yellow_yds_total</th>";
                     break;
 
                     case 'white_yards' :
-                        echo "<th class=''>$white_yds_total</th>";
+                        echo "<th class='white'>$white_yds_total</th>";
                     break;
 
                     case 'red_par' :
-                        echo "<th class=''>$red_par_total</th>";
+                        echo "<th class='red'>$red_par_total</th>";
                     break;
 
                     case 'yellow_par' :
-                        echo "<th class=''>$yellow_par_total</th>";
+                        echo "<th class='yellow'>$yellow_par_total</th>";
                     break;
 
                     case 'white_par' :
-                        echo "<th class=''>$white_par_total</th>";
+                        echo "<th class='white'>$white_par_total</th>";
                     break;
 
                     case 'blue_par' :
-                        echo "<th class=''>$blue_par_total</th>";
+                        echo "<th class='blue'>$blue_par_total</th>";
                     break;
 
                     case 'si_red' :
@@ -384,35 +514,35 @@
                     break;
 
                     case 'blue_yards' :
-                        echo "<th class=''>$blue_yds_total</th>";
+                        echo "<th class='blue'>$blue_yds_total</th>";
                     break;
 
                     case 'red_yards' :
-                        echo "<th class=''$>$red_yds_total</th>";
+                        echo "<th class='red'>$red_yds_total</th>";
                     break;
 
                     case 'yellow_yards' :
-                        echo "<th class=''>$yellow_yds_total</th>";
+                        echo "<th class='yellow'>$yellow_yds_total</th>";
                     break;
 
                     case 'white_yards' :
-                        echo "<th class=''>$white_yds_total</th>";
+                        echo "<th class='white'>$white_yds_total</th>";
                     break;
 
                     case 'red_par' :
-                        echo "<th class=''>$red_par_total</th>";
+                        echo "<th class='red'>$red_par_total</th>";
                     break;
 
                     case 'yellow_par' :
-                        echo "<th class=''>$yellow_par_total</th>";
+                        echo "<th class='yellow'>$yellow_par_total</th>";
                     break;
 
                     case 'white_par' :
-                        echo "<th class=''>$white_par_total</th>";
+                        echo "<th class='white'>$white_par_total</th>";
                     break;
 
                     case 'blue_par' :
-                        echo "<th class=''>$blue_par_total</th>";
+                        echo "<th class='blue'>$blue_par_total</th>";
                     break;
 
                     case 'si_red' :
@@ -439,78 +569,15 @@
 
 
             echo '</table>';
-    }
+        }
 
-        public function loopThroughHoles() 
-        {
-
-
-
-            
-
-
-
-
-        // echo '<table>';
-        // foreach ($holes as $key => $hole) {
-        //     echo '<tr>';
-        //     foreach ($hole as $key2 => $hole_element)
-        //     {
-        //         echo "<td>" . $hole_element . "</td>";
-        //         //echo $hole_element . '....<br />';
-        //         // if ($key2 == 'pro_tip') 
-        //         // {
-        //         //     unset($holes[$key][$key2]);
-        //         // }
-        //     }
-        //     echo '</tr>';
-        //     $this->setHoles($holes);
-
-        //     $holes = $this->getHoles();
-        //     $numColumns = count($holes);
-
-        //     // Output the scores to HTML.
-        //     // echo "<table>";
-
-        //     // foreach ( $holes as $key => $hole) {
-        //     //     echo '<tr>';
-        //     //     foreach( $hole as $key2 => $value)
-        //     //     {
-        //     //         echo "<td>" . $key2 . "</td>";
-
-        //     //     }
-        //     //     echo '</tr>';
-
-                
-        //     //     //echo "<td>" . $hole[$key] . "</td>";
-        //     // }
-        //     // echo "</table>";
-
-        // // Remove the "blue yards" column from the array.
-        // //array_pop($columns);
-
-        // // Add the "red par" column after the "red yards" column.
-        // //array_splice($columns, 1, 0, "red par");
-
-        // // Remove the "white par" column from the array.
-        
-        //      //unset ($hole[$key]['name']) ;
-        
-            
-
-
-        //     //echo "Hole {$hole['number']}: par {$hole['white_par']}, yardage {$hole['red_yards']}\n </br>
-        //     //Pro Tip: {$hole['pro_tip']} <br /> Key is {$key} <br/>";
-        // }
-        // echo '</table>';
-    }
-
-    public function pretty_print($var)
-    {
-        echo '<pre>';
-        print_r($var);
-        echo '</pre>';
-    }
+    
+        // used for debugging to print out variables, arrays and objects
+        public function pretty_print($var){
+            echo '<pre>';
+            print_r($var);
+            echo '</pre>';
+        }
 
     /////////// SETTERS AND GETTERS ///////////////////////
 
@@ -553,6 +620,8 @@
         {
             $this->course_ID = $course_ID;
         }
+
+        
 
         public function getHoles() 
         {

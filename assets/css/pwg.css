@@ -47,19 +47,19 @@
             .divTableBody {
                 display: table-row-group;
             }
-            .yellow {
+            .yellow, .yellow_yards, .yellow_par {
                 background-color: lightyellow;
             }
-            .red {
+            .red, .red_yards, .red_par{
                     background-color: lightcoral;
                 }
 
-            .blue {
+            .blue, .blue_yards, .blue_par {
                 background-color: lightblue;
 
             }
 
-            .white {
+            .white, .white_yards, .white_par{
                 background-color: white;
             }
 
@@ -84,7 +84,7 @@
             .name {
                 min-width: 200px;
             }
-            .diagonal-cell {
+            /* .diagonal-cell {
                 transform: skew(-45deg);
                 background-color: #ddd;
                 padding: 10px;
@@ -106,7 +106,7 @@
 
             .white {
                 background-color: white;
-            }
+            } */
 
             #course_details {
                 width: 400px;
@@ -174,4 +174,64 @@
             }
             .form-inputs h4 {
                 margin-bottom: 20px;
+            }
+            input[type=number] {
+                width: 90px;
+            } 
+            .number {
+                width: 100px;
+                display:inline-block;
+                
+            }
+            .tee-container {
+                text-align: center;
+                border: 3px solid black;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                
+            }
+            .tee-container h4 {
+                text-align: left;
+                padding-left: 20px;
+                margin-top: 10px;
+                border-bottom: 1px solid black;
+                padding-bottom: 5px;
+                background-color: white;
+                border-top: 1px solid black;
+                padding-top: 5px;
+            }
+
+            .number-holes-wrap{
+                margin: 20px 0;
+            }
+            .tees-wrap{
+                margin-top: 20px;
+            }
+            td.namebox {
+                text-align: left;
+            }
+            
+            .namebox span {
+                margin: 0 10px;
+            }
+
+            .hole-wrap table td, table th, .wp-block-table td, .wp-block-table th {
+                border: 0;
+            }
+            .hole-wrap tr:nth-child(odd) {
+                border-top: 3px solid black;
+            }
+            .namebox span {
+
+                font-weight: bold;
+            }
+
+
+            li.pwg-course-item {
+                display: contents;
+            }
+
+            ul.pwg-course-list {
+                padding-left: 0;
+                padding-top: 60px;
             }
