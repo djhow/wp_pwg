@@ -1,0 +1,177 @@
+/*
+            div.scorecard {}
+
+            .divTable.scorecard .divTableCell,
+            .divTable.scorecard .divTableHead {}
+            */
+            .divTable.scorecard .divTableHeading {
+                background: #a4d2a4;
+            }
+
+            .divTable.scorecard .divTableHeading .divTableHead {
+                font-weight: bold;
+            }
+
+            .scorecard .tableFootStyle {
+                font-weight: normal;
+            }
+
+            /* DivTable.com */
+            .divTable {
+                display: table;
+            }
+
+            .divTableRow {
+                display: table-row;
+            }
+
+            .divTableHeading {
+                display: table-header-group;
+            }
+
+            .divTableCell,
+            .divTableHead {
+                display: table-cell;
+                padding: 10px;
+                border: 1px solid #a4d2a4;
+            }
+
+            .divTableHeading {
+                display: table-header-group;
+            }
+
+            .divTableFoot {
+                display: table-footer-group;
+            }
+
+            .divTableBody {
+                display: table-row-group;
+            }
+            .yellow {
+                background-color: lightyellow;
+            }
+            .red {
+                    background-color: lightcoral;
+                }
+
+            .blue {
+                background-color: lightblue;
+
+            }
+
+            .white {
+                background-color: white;
+            }
+
+            #course_details {
+                width: 400px;
+            }
+
+            table {
+                margin: 0;
+                padding: 0;
+            }
+
+            .red,
+            .yellow,
+            .white,
+            .blue,
+            td {
+                min-width: 80px;
+                text-align: center;
+            }
+
+            .name {
+                min-width: 200px;
+            }
+            .diagonal-cell {
+                transform: skew(-45deg);
+                background-color: #ddd;
+                padding: 10px;
+            }
+
+            .yellow, .yellow_yards, .si_yellow, .yellow_par {
+                background-color: lightyellow;
+            }
+
+            .red, .red_yards, .si_red, .red_par {
+
+                background-color: lightcoral;
+            }
+
+            .blue, .blue_yards, .si_blue, .blue_par {
+                background-color: lightblue;
+
+            }
+
+            .white {
+                background-color: white;
+            }
+
+            #course_details {
+                width: 400px;
+            }
+
+            table {
+                margin: 0;
+                padding: 0;
+            }
+
+            .red,
+            .yellow,
+            .white,
+            .blue,
+            td {
+                min-width: 80px;
+                text-align: center;
+            }
+
+            .name {
+                min-width: 200px;
+            }
+
+            .totals {
+                background-color: rgb(235, 235, 235);
+                border-top: 5px solid rgb(129, 129, 129);
+                border-bottom: 5px solid rgb(129, 129, 129);
+            }
+
+            li {
+                /*border: 1px solid black;*/
+                width: 30px;
+                text-align: center;
+                float: left;
+                list-style-type: none;
+            }
+           .container ul {
+               /* list-style-type: none; */
+               margin: 0;
+            }
+            .score-container {
+                display:grid;
+                grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+                margin: 0;
+            }
+            .score {
+                background-color: #b2d1b2;
+            }
+            .form-inputs {
+                display: grid;
+                margin: 10px;
+            }
+            #golfclub-search-results {
+               background-color: white; 
+            }
+            .country-select .country-list {
+
+                width: 288px;
+            }
+            li.country {
+                width: 219px;
+            }
+            h3#club-heading {
+                margin-top: 40px;
+            }
+            .form-inputs h4 {
+                margin-bottom: 20px;
+            }

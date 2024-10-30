@@ -33,8 +33,18 @@ class pwgGolfClub {
         }
     }
 
-    public function stitch_scorecard($holes)
+    public function save_scorecard()
     {
+
+        /**
+         *  get the golf club
+         * 
+         *  iterate through the golf courses
+         * 
+         * iterate through the holes and save
+         * 
+         * 
+         */
 
     }
     
@@ -42,55 +52,71 @@ class pwgGolfClub {
     {
         
     $golfcourses = $this->getClubCourses();
-        for ( $i = 0; $i < count($golfcourses); $i++ )
-    {
-
-        if ($golfcourses[$i]->white_yards_total > 0)
-        {
-            $golfcourses[$i]->white_yards = $i;
-        }
-
-        if ($golfcourses[$i]->yellow_yards_total > 0)
-        {
-            $golfcourses[$i]->yellow_yards = $i;
-        }
-
-        if ($golfcourses[$i]->red_yards_total > 0)
-        {
-            $golfcourses[$i]->red_yards = $i;
-        }
-
-        if ($golfcourses[$i]->blue_yards_total > 0)
-        {
-            $golfcourses[$i]->blue_yards = $i;
-        }
-
-        if ($golfcourses[$i]->white_par_total > 0)
-        {
-            $golfcourses[$i]->white_par = $i;
-        }
-
-        if ($golfcourses[$i]->yellow_par_total > 0)
-        {
-            $golfcourses[$i]->yellow_par = $i;
-        }
-
-        if ($golfcourses[$i]->red_par_total > 0)
-        {
-            $golfcourses[$i]->red_par = $i;
-        }
-
-        if ($golfcourses[$i]->blue_par_total > 0)
-        {
-            $golfcourses[$i]->blue_par = $i;
-        }
+        
+        $holesnames = 0;
     
- }
- $this->pretty_print($golfcourses);
- //$this->pretty_print($i);
+    
+    
+        $columns_count = 0;
+        for ( $i = 0; $i < count($golfcourses); $i++ )
+        {           
+            if ( 1 > 0)
+            {
+                $golfcourses[$i]->coursename = $i;
+                $columns_count++;
+            }
 
-//$this->pretty_print($golfcourses);
+            if ($golfcourses[$i]->white_yards_total > 0)
+            {
+                $golfcourses[$i]->white_yards = $i;
+                $columns_count++;
+            }
 
+            if ($golfcourses[$i]->yellow_yards_total > 0)
+            {
+                $golfcourses[$i]->yellow_yards = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->red_yards_total > 0)
+            {
+                $golfcourses[$i]->red_yards = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->blue_yards_total > 0)
+            {
+                $golfcourses[$i]->blue_yards = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->white_par_total > 0)
+            {
+                $golfcourses[$i]->white_par = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->yellow_par_total > 0)
+            {
+                $golfcourses[$i]->yellow_par = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->red_par_total > 0)
+            {
+                $golfcourses[$i]->red_par = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->blue_par_total > 0)
+            {
+                $golfcourses[$i]->blue_par = $i;
+                $columns_count++;
+            }
+    
+        }
+        echo $columns_count;
+        $this->pretty_print($golfcourses);
 
 foreach ($golfcourses as $course) {
     
@@ -227,6 +253,292 @@ table {
     <td class="blue"><?php echo $course->holes[$i]->blue_yards; ?></td>
     <td><?php echo $course->holes[$i]->red_par; ?></td>
     <td><?php echo $course->holes[$i]->si_red; ?></td>
+  </tr>
+
+  <?php
+    $wy_total += $course->holes[$i]->white_yards;
+    $yy_total += $course->holes[$i]->yellow_yards;
+    $ry_total += $course->holes[$i]->red_yards;
+    $by_total += $course->holes[$i]->blue_yards;
+
+    if ($i == 8) {
+  ?>
+      <tr>
+        <td>Front</td>
+        <td></td>
+        <td class="white"><?php echo $wy_total; ?></td>
+        <td class="yellow"><?php echo $yy_total; ?></td>
+        <td></td>
+        <td></td>
+        <td class="red"><?php echo $ry_total; ?></td>
+        <td class="blue"><?php echo $by_total; ?></td>
+        <td></td>
+        <td></td>
+      </tr>
+      
+  <?php  
+      $wy_total = 0;
+      $yy_total = 0;
+      $ry_total = 0;
+      $by_total = 0;
+    }
+
+    // Check for end of back nine and generate back nine totals row
+    if ($i == 17) {
+      $wy_total += $course->holes[$i+1]->white_yards;
+      $yy_total += $course->holes[$i+1]->yellow_yards;
+      $ry_total += $course->holes[$i+1]->red_yards;
+      $by_total += $course->holes[$i+1]->blue_yards;
+      
+      ?>
+      <tr>
+        <td>Back</td>
+        <td></td>
+        <td class="white"><?php echo $wy_total; ?></td>
+        <td class="yellow"><?php echo $yy_total; ?></td>
+        <td></td>
+        <td></td>
+        <td class="red"><?php echo $ry_total; ?></td>
+        <td class="blue"><?php echo $by_total; ?></td>
+        <td></td>
+        <td></td>
+      </tr>
+  <?php
+    }
+  ?>
+
+  <?php } ?>
+
+
+
+<!-- Output Totals row after all holes for the current course have been processed -->
+
+  <tr>
+    <td>Totals</td>
+    <td></td>
+    <td class="white"><?php echo $course->white_yards_total;?></td>
+    <td class="yellow"><?php echo $course->yellow_yards_total;?></td>
+    <td></td>
+    <td></td>
+    <td class="red"><?php echo $course->red_yards_total;?></td>
+    <td class="blue"><?php echo $course->blue_yards_total;?></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+<?php } 
+
+        
+
+
+    }
+
+
+    public function show_edit_scorcard( $course_ID = 0 )
+    {
+        
+    $golfcourses = $this->getClubCourses();
+        
+        $holesnames = 0;
+    
+    
+    
+        $columns_count = 0;
+        for ( $i = 0; $i < count($golfcourses); $i++ )
+        {           
+            if ( 1 > 0)
+            {
+                $golfcourses[$i]->coursename = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->white_yards_total > 0)
+            {
+                $golfcourses[$i]->white_yards = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->yellow_yards_total > 0)
+            {
+                $golfcourses[$i]->yellow_yards = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->red_yards_total > 0)
+            {
+                $golfcourses[$i]->red_yards = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->blue_yards_total > 0)
+            {
+                $golfcourses[$i]->blue_yards = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->white_par_total > 0)
+            {
+                $golfcourses[$i]->white_par = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->yellow_par_total > 0)
+            {
+                $golfcourses[$i]->yellow_par = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->red_par_total > 0)
+            {
+                $golfcourses[$i]->red_par = $i;
+                $columns_count++;
+            }
+
+            if ($golfcourses[$i]->blue_par_total > 0)
+            {
+                $golfcourses[$i]->blue_par = $i;
+                $columns_count++;
+            }
+    
+        }
+
+
+foreach ($golfcourses as $course) {
+    
+  $wy_total = 0;
+  $yy_total = 0;
+  $ry_total = 0;
+  $by_total = 0;
+?>
+<style>
+.diagonal-cell {
+  transform: skew(-45deg);
+  background-color: #ddd;
+  padding: 10px;
+}
+
+.yellow {
+    background-color: lightyellow ;
+}
+.red {
+    background-color: lightcoral;
+}
+.blue {
+    background-color: lightblue;
+    
+}
+.white {
+    background-color: white;
+}
+#course_details{
+    width: 400px;
+}
+
+table {
+    margin:0;
+    padding:0;
+}
+.red,.yellow,.white,.blue, td {
+    min-width: 80px;
+    text-align: center;
+}
+.name {
+    min-width: 200px;
+}
+</style>
+<table id="course_details">
+    <tr>
+        <th colspan="10"><?php echo $course->name;  ?> Details</th>
+    </tr>
+    <tr>
+        <th class="white">Par</th>
+        <th class="yellow">Par</th>
+        <th class="red">Par</th>
+        <th class="blue">Par</th>
+
+    </tr>
+    <tr>
+        <td class="white"><input type="hidden" maxlength="2" style="width: 30px;" id="<?php echo $course->white_par_total . '_' . $course->hole_ID  ?>" name="<?php echo $course->white_par_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->white_par_total;?>"><?php echo $course->white_par_total;?></td>
+        <td class="yellow"><input type="hidden" maxlength="2" style="width: 30px;" id="<?php echo $course->yellow_par_total . '_' . $course->hole_ID  ?>" name="<?php echo $course->yellow_par_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->yellow_par_total;?>"><?php echo $course->yellow_par_total;?></td>
+        <td class="red"><input type="hidden" maxlength="2" style="width: 30px;" id="<?php echo $course->red_par_total . '_' . $course->hole_ID  ?>" name="<?php echo $course->red_par_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->red_par_total;?>"><?php echo $course->red_par_total;?></td>
+        <td class="blue"><input type="hidden" maxlength="2" style="width: 30px;" id="<?php echo $course->red_par_total . '_' . $course->hole_ID  ?>" name="<?php echo $course->red_par_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->red_par_total;?>"><?php echo $course->blue_par_total;?></td>
+
+    </tr>
+    <tr>
+        <th class="white">Yds</th>
+        <th class="yellow">Yds</th>
+        <th class="red">Yds</th>
+        <th class="blue">Yds</th>
+
+    </tr>
+    <tr>
+        <td class="white"><input type="hidden" maxlength="4" style="width: 60px;" id="<?php echo $course->white_yards_total . '_' . $course->hole_ID  ?>" name="<?php echo $course->white_yards_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->white_yards_total;?>"><?php echo $course->white_yards_total;?></td>
+        <td class="yellow"><input type="hidden" maxlength="4" style="width: 60px;" id="<?php echo $course->yellow_yards_total . '_' . $course->hole_ID  ?>" name="<?php echo $course->yellow_yards_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->yellow_yards_total;?>"><?php echo $course->yellow_yards_total;?></td>
+        <td class="red"><input type="hidden" maxlength="4" style="width: 60px;" id="<?php echo $course->red_yards_total . '_' . $course->hole_ID  ?>" name="<?php echo $course->red_yards_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->red_yards_total;?>"><?php echo $course->red_yards_total;?></td>
+        <td class="blue"><input type="hidden" maxlength="4" style="width: 60px;" id="<?php echo $course->blue_yards_total . '_' . $course->hole_ID  ?>" name="<?php echo $course->blue_yards_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->blue_yards_total;?>"><?php echo $course->blue_yards_total;?></td>
+
+
+    </tr>
+    
+    <tr>
+        <th class="white">Course Rating</th>
+        <th class="yellow">Slope Rating</th>
+        <th class="red">Course Rating</th>
+        <th class="blue">Slope Rating</th>
+
+    </tr>
+    <tr>
+        <td class="white"><input type="hidden" maxlength="5" style="width: 50px;" id="<?php echo $course->cr_white . '_' . $course->hole_ID  ?>" name="<?php echo $course->cr_white . '_' . $course->hole_ID  ?>" value="<?php echo $course->cr_white;?>"><?php echo $course->cr_white;?></td>
+        <td class="yellow"><input type="hidden" maxlength="5" style="width: 50px;" id="<?php echo $course->sr_white . '_' . $course->hole_ID  ?>" name="<?php echo $course->sr_white . '_' . $course->hole_ID  ?>" value="<?php echo $course->sr_white;?>"><?php echo $course->sr_white;?></td>
+        <td class="red"><input type="hidden" maxlength="5" style="width: 50px;" id="<?php echo $course->cr_red . '_' . $course->hole_ID  ?>" name="<?php echo $course->cr_red . '_' . $course->hole_ID  ?>" value="<?php echo $course->cr_red;?>"><?php echo $course->cr_red;?></td>
+        <td class="blue"><input type="hidden" maxlength="5" style="width: 50px;" id="<?php echo $course->sr_red . '_' . $course->hole_ID  ?>" name="<?php echo $course->sr_red . '_' . $course->hole_ID  ?>" value="<?php echo $course->sr_red;?>"><?php echo $course->sr_red;?></td>
+
+    </tr>
+    
+    
+</table>
+<?php
+
+
+
+
+
+
+
+?>
+<table>
+    <tr>
+        <th colspan="10"><?php echo $course->name;  ?> Scorecard</th>
+    <tr>
+  <tr>
+    <th class=""></th>
+    <th class="name">Name</th>
+    <th class="white">Yds</th>
+    <th class="yellow">yds</th>
+    <th class="">Par</th>
+    <th class="">SI</th>
+    <th class="red">yds</th>
+    <th class="blue">yds</th>
+    <th class="">Par</th>
+    <th class="">SI</th>
+  </tr>
+
+  <?php
+  for ($i=0; $i < count($course->holes) ; $i++) {
+  ?>
+
+  <tr>
+    <td><?php echo $course->holes[$i]->number;?></td>
+    <td><input maxlength="20" style="width: 200px;" id="<?php echo $course->holes[$i]->name . '_' . $course->hole_ID  ?>" name="<?php echo $course->red_par_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->name;?>"></td>
+    <td class="white"><input maxlength="3" style="width: 40px;" id="<?php echo $course->holes[$i]->white_yards . '_' . $course->hole_ID  ?>" name="<?php echo $course->red_par_total . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->white_yards;?>"></td>
+    <td class="yellow"><input maxlength="3" style="width: 40px;" id="<?php echo $course->holes[$i]->yellow_yards . '_' . $course->hole_ID  ?>" name="<?php echo $course->yellow_yards . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->yellow_yards;?>"></td>
+    <td class=""><input maxlength="3" style="width: 40px;" id="<?php echo $course->holes[$i]->yellow_par . '_' . $course->hole_ID  ?>" name="<?php echo $course->yellow_par . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->yellow_par;?>"></td>
+    <td><input maxlength="3" style="width: 40px;" id="<?php echo $course->holes[$i]->si_white . '_' . $course->hole_ID  ?>" name="<?php echo $course->si_white . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->si_white;?>"></td>
+    <td class="red"><input maxlength="3" style="width: 40px;" id="<?php echo $course->holes[$i]->red_yards . '_' . $course->hole_ID  ?>" name="<?php echo $course->red_yards . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->red_yards;?>"></td>
+    <td class="blue"><input maxlength="3" style="width: 40px;" id="<?php echo $course->holes[$i]->blue_yards . '_' . $course->hole_ID  ?>" name="<?php echo $course->blue_yards . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->blue_yards;?>"></td>
+    <td><input maxlength="3" style="width: 40px;" id="<?php echo $course->holes[$i]->red_par . '_' . $course->hole_ID  ?>" name="<?php echo $course->red_par . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->red_par;?>"></td>
+    <td><input maxlength="3" style="width: 40px;" id="<?php echo $course->holes[$i]->si_red . '_' . $course->hole_ID  ?>" name="<?php echo $course->si_red . '_' . $course->hole_ID  ?>" value="<?php echo $course->holes[$i]->si_red;?>"></td>
   </tr>
 
   <?php

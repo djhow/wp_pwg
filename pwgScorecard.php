@@ -2,10 +2,49 @@
 
 class Scorecard {
 
+    private $golfclub;
+    private $golfcourse;
+    
+    private $holes;
+
     private $player_1;
     private $player_2;
     private $player_3;
     private $player_4;
+
+    public function getGolfclub()
+    {
+        return $this->golfclub;
+    }
+
+    public function setGolfclub($golfclub)
+    {
+        $this->$golfclub = $golfclub;
+    }
+
+    public function getGolfcourse()
+    {
+        return $this->golfcourse;
+    }
+
+    public function setGolfcourse($golfcourse)
+    {
+        $this->$golfcourse = $golfcourse;
+    }
+
+    public function getHoles()
+    {
+        return $this->holes;
+    }
+
+    public function setHoles($holes)
+    {
+        $this->$holes = $holes;
+    }
+
+
+
+
 
 
     public function getPlayer1()
