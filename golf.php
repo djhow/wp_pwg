@@ -387,7 +387,7 @@ class PWG_Plugin
 
 // Run
 if (class_exists('PWG_Plugin')) {
-    $pwgPlugin = new PwgPlugin();
+    $pwgPlugin = new PWG_Plugin();
     $pwgPlugin->register();
 }
 
