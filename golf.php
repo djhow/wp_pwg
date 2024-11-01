@@ -64,10 +64,6 @@ class PwgPlugin
         require_once(PWG_PLUGIN_DIR . '/classes/PWG_GolfClub.php');
         require_once(PWG_PLUGIN_DIR . '/classes/PWG_GolfCourse.php');
         require_once(PWG_PLUGIN_DIR . '/classes/PWG_EntityManager.php');
-        //require_once(PWG_PLUGIN_DIR . '/classes/holes.php');
-        require_once(PWG_PLUGIN_DIR . '/classes/score.php');
-        require_once(PWG_PLUGIN_DIR . '/inc/pwgAjax.php');
-
         require_once(PWG_PLUGIN_DIR . '/classes/PWG_User.php');
         require_once(PWG_PLUGIN_DIR . '/classes/PWG_Golfer.php');
         require_once(PWG_PLUGIN_DIR . '/classes/PWG_Match.php');
@@ -90,37 +86,18 @@ class PwgPlugin
         add_action('personal_options_update', [$this, 'save_handicap_field']);
         add_action('edit_user_profile_update', [$this, 'save_handicap_field']);
 
-
-
         add_action('register_form', [$this, 'extra_registration_fields']);
         add_action('user_register', [$this, 'save_extra_registration_fields']);
 
-
-        // AJAX
-        add_action('wp_ajax_golfclub_search', [$this, 'golfclub_search_callback']);
-        add_action('wp_ajax_nopriv_golfclub_search', [$this, 'golfclub_search_callback']);
-
-        // example of ajax from wordpress.org
-        add_action('wp_ajax_nopriv_my_tag_count', [$this, 'my_ajax_handler']);
-        add_action('wp_ajax_my_tag_count', [$this, 'my_ajax_handler']);
-
-        //add_action('wp_ajax_pwg_add_new_golfclub', [new golfClub(), 'add_new_golfclub']); 
         add_action('wp_ajax_pwg_add_new_golfclub', [PWG_GolfClub::class, 'add_new_golfclub']);
         add_action('wp_ajax_nopriv_pwg_add_new_golfclub', [PWG_GolfClub::class, 'add_new_golfclub']);
 
         add_action('wp_ajax_update_club', [new PWG_GolfClub(), 'update_club']);
         add_action('wp_ajax_nopriv_update_club', [new PWG_GolfClub(), 'update_club']);
 
-
-        //add_action('admin_post_save_golf_club', [new PWG_GolfClub(), 'handle_submission']);
-        //add_action('admin_post_nopriv_save_golf_club', [new PWG_GolfClub(), 'handle_submission']);
-
-        // End AJAX
-
-        //add_filter( 'the_content', [$this, 'getClub'], 1 );
-        //add_filter( 'the_content', [$this, 'getCourse'], 1 );
-
         add_shortcode('pwg_display', 'pwg_golf_club');
+
+        // ShortCodes
 
         // Register shortcode to display members list
         add_shortcode('pwg_members', function ($atts) {
@@ -146,20 +123,6 @@ class PwgPlugin
             }
         });
 
-
-        // add_action('wp_ajax_find_clubs', 'ajax_find_clubs');
-        // add_action('wp_ajax_nopriv_find_clubs', 'ajax_find_clubs');
-
-        /*
-        File to handle metaboxes on the admin side for Golfclubs, courses, scorecards etc
-        */
-
-
-        //add_action('add_meta_boxes', [$this, 'add_golf_club_meta_box']);
-
-        // Remove any existing action registrations for 'admin_post_save_golf_course'
-        // Add this near the top of your PwgPlugin class registration code:
-
         add_action('init', function () {
             add_action('admin_post_save_golf_course', [PWG_GolfCourse::class, 'handle_form_submission']);
             add_action('admin_post_nopriv_save_golf_course', function () {
@@ -167,66 +130,8 @@ class PwgPlugin
             });
         });
 
-        // In your main plugin file:
         add_shortcode('golf_club_form', ['PWG_GolfClub', 'shortcode_handler']);
         add_action('admin_post_save_golf_club', ['PWG_GolfClub', 'handle_submission']);
-    }
-
-
-
-
-    function my_ajax_handler()
-    {
-        // handle ajsx request here
-        check_ajax_referer('title_example');
-        $title = wp_unslash($_POST['title']);
-        update_user_meta(get_current_user_id(), 'title_preference', sanitize_title($title));
-
-        $args      = array(
-            'title_preference' => $title,
-        );
-        $the_query = new WP_Query($args);
-        wp_send_json(esc_html($title) . ' (' . $the_query->post_count . ') ');
-
-        wp_die();
-    }
-
-    function handle_new_club_form()
-    {
-        if (isset($_POST['clubname'])) {
-            $this->pretty_print($_POST);
-        }
-    }
-
-    function addNewClub()
-    {
-
-        if (isset($_POST['clubname'])) {
-
-            $this->pretty_print($_POST);
-
-            $newClub = new PWG_GolfClub(0);
-
-            $newClub->setName(sanitize_text_field($_POST['clubname']));
-            $newClub->setAbout(sanitize_text_field($_POST['aboutclub']));
-            $newClub->setAddress(sanitize_text_field($_POST['address_1']));
-            //$newClub->setAddress2( sanitize_text_field( $_POST['address_2'] ) );
-            //$newClub->setTownCity( sanitize_text_field( $_POST['town_city'] ) );
-            //$newClub->setPostcode( sanitize_text_field( $_POST['postcode'] ) );
-            //$newClub->setGps( sanitize_text_field( $_POST['gps'] ) );
-            $newClub->setContact(sanitize_text_field($_POST['phone']));
-            //$newClub->setEmail( sanitize_email( $_POST['email'] ) );
-            //$newClub->setFacebook( sanitize_url( $_POST['facebook'] ) );
-            //$newClub->setTwitter( sanitize_text_field( $_POST['twitter'] ) );
-
-
-            //$club_ID = $newClub->insertClub();
-
-            // if ($club_ID){
-            //     // insert golf course
-            //     $golfcourse = new PWG_GolfCourse();
-            // }
-        }
     }
 
     function custom_post_type()
@@ -480,14 +385,10 @@ class PwgPlugin
     }
 }
 
+// Run
 if (class_exists('PwgPlugin')) {
     $pwgPlugin = new PwgPlugin();
     $pwgPlugin->register();
-    //$pwgPlugin->add_classes();
-    // $pwgPlugin->register_scripts();
-    // $pwgPlugin->register_shortcodes();
-    //$pwgPlugin->register_content_filters();
-    // $pwgPlugin->add_admin_menus();
 }
 
 // activation
@@ -504,48 +405,5 @@ add_action('admin_post_club_form_submission', ['pwgGolfClub', 'club_form_submiss
 // function for shortcode
 function pwg_golf_club()
 {
-
-
-
-
-
-
-
-
-    //$score_ID = 1;
-    //$score = new Score($score_ID);
-    //$score->insert_score();
-    //$score->edit_score();
-
-    //echo '<pre>';
-    //print_r($score);
-    //echo '</pre>';
-
-
-    $club_ID = 8;
-    $gc =  new PWG_GolfClub($club_ID);
-    // echo $gc->displ();
-    // $gc->show_course_scorecard();
-    //$holes = new Holes(2);
-    // $holes->build_table('front_nine');
-    // $holes->build_table('back_nine');
-    // $holes->swap_columns();
-    // echo '<pre>';
-    // print_r($gc);
-    // echo '</pre>';
-    //$gc->show_edit_scorcard();
-    //$c = new golfCourse(2);
-    //$d = new golfCourse($c);
-
-    //$golfcourse = new golfCourse($club_ID);
-
-    //$gc->setClubCourses($golfcourse);
-
-    //$gc->setClubCourses($golfcourse);
-    //$golf_club->show_golf_club();
-    // $golf_club = new golfClub(8);
-    // $golf_club->show_edit_scorcard();
-    //$golf_club->show_golf_club_submission(); 
-    //$golf_club->delete_golf_club(2);
     echo "<p>The Code to mess around with this shortcode is in pwg_golf_club() in golf.php</p>";
 }
