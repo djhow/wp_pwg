@@ -11,7 +11,7 @@ Version: 1.0
 Requires at least: 5.0
 Requires PHP: 5.2
 Author: djhowdydoo
-Author URI: https://playtheworldatgolf.com/wordpress-plugins/
+Author URI: https://playtheworldatgolf.com/
 License:
 Text Domain: pwg
 */
