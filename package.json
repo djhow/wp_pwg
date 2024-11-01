@@ -1,0 +1,17 @@
+{
+  "name": "pwg-golf",
+  "version": "1.0.0",
+  "description": "Track golf scores in a match",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wordpress",
+    "golf",
+    "plugin",
+    "scoring"
+  ],
+  "author": "djhowdydoo",
+  "license": "GPL-2.0-or-later"
+}

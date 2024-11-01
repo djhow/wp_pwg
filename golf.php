@@ -28,7 +28,7 @@ define('PWG_PLUGIN_DIR', plugin_dir_path(__FILE__));
 
 // Activation, deactivation and uninstall plugin
 
-class PwgPlugin
+class PWG_Plugin
 {
     function __construct()
     {
@@ -386,7 +386,7 @@ class PwgPlugin
 }
 
 // Run
-if (class_exists('PwgPlugin')) {
+if (class_exists('PWG_Plugin')) {
     $pwgPlugin = new PwgPlugin();
     $pwgPlugin->register();
 }
